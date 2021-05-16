@@ -69,15 +69,18 @@ public class ProductServiceImplementation implements ProductService
         int noOfUnitsToCalculate;
         int productId;
 
+        // if requested object is null throw an exception
         if(priceTableRequest == null)
             throw new BadApiRequestException("Requested object cannot be null");
 
         productId = priceTableRequest.getProductId();
         noOfUnitsToCalculate = priceTableRequest.getNoOfUnits();
 
+        // if requested parameters no as expected throw an exception
         if(noOfUnitsToCalculate < 1)
             throw new BadApiRequestException("No of units should be larger than 0");
 
+        // if requested parameters no as expected throw an exception
         if(productId <= 0)
             throw new BadApiRequestException("Product id should be larger than 0");
 
@@ -86,11 +89,12 @@ public class ProductServiceImplementation implements ProductService
 
         try
         {
+            // fetching product details from DB using declared method
             ProductDto productDto = getAProduct(productId);
 
             priceTableResponse.setProduct(productDto);
 
-            // calculate optimized price for each no of units by calling price engine
+            // calculate and create list of optimized prices for each no of units by calling the price engine
             for(int i = 1; i <= noOfUnitsToCalculate; i++)
             {
                 prices.add(new PriceTableData(i, priceEngine.calculateThePricing(productDto.getCartonPrice(), productDto.getCartonSize(), i, 0)));
@@ -120,12 +124,15 @@ public class ProductServiceImplementation implements ProductService
     @Override
     public SingleProductPriceCalculateResponse calculatePriceForSingleProduct(SingleProductPriceCalculateRequest productPriceCalculateRequest)
     {
+        // if requested object is null throw an exception
         if(productPriceCalculateRequest == null)
             throw new BadApiRequestException("Requested object cannot be null");
 
+        // extract values to local variables from the request
         int noOfSingleUnits = productPriceCalculateRequest.getNoOfSingleUnits();
         int noOfCartons = productPriceCalculateRequest.getNoOfCartons();
 
+        // if requested parameters no as expected throw an exception
         if(noOfSingleUnits < 1 && noOfCartons < 1)
             throw new BadApiRequestException("Either single units or cartons should be larger than 0");
 
@@ -133,8 +140,10 @@ public class ProductServiceImplementation implements ProductService
 
         try
         {
+            // fetching product details from DB using declared method
             ProductDto productDto = getAProduct(productPriceCalculateRequest.getProductId());
 
+            // creating response by merging product and order price
             priceCalculateResponse.setProduct(productDto);
             priceCalculateResponse.setPrice(priceEngine.calculateThePricing(productDto.getCartonPrice(), productDto.getCartonSize(), noOfSingleUnits, noOfCartons));
         }

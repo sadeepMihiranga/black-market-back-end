@@ -7,6 +7,10 @@ import static lk.sadeep.balckmarket.util.AppConstants.DECIMAL_ZERO;
 @Component
 public class PriceEngine
 {
+    private static final Double PRICE_ADDED_PERCENTAGE = 0.3;
+    private static final Double PRICE_DISCOUNT_PERCENTAGE = 0.1;
+    private static final Integer CARTON_DISCOUNT_STARTING_RANGE = 3;
+
     /**
      * @Method            :   calculateThePricing
      * @Parameters        :   double cartonPrice, int cartonSize, int noOfSingleUnits, int noOfCarton
@@ -17,6 +21,7 @@ public class PriceEngine
         int calculatedSingleUnits;
         int calculatedCartons = 0;
 
+        // if no of single units are greater that carton size then do the optimizing calculations
         if(noOfSingleUnits >= cartonSize)
         {
             calculatedSingleUnits = noOfSingleUnits % cartonSize;
@@ -25,6 +30,7 @@ public class PriceEngine
         else
             calculatedSingleUnits = noOfSingleUnits;
 
+        // if requested no of cartons are also greater than 1 then add optimized no of carton with requested cartons
         if(noOfCarton >= 1)
             calculatedCartons += noOfCarton;
 
@@ -40,9 +46,11 @@ public class PriceEngine
     {
         double orderPrice = DECIMAL_ZERO;
 
+        // if optimized no of units less than carton size and not equal to the zero then call single unit's price calculation method
         if(noOfSingleUnits < cartonSize && noOfSingleUnits != 0)
             orderPrice += singleUnitAmount(noOfSingleUnits, cartonPrice, cartonSize);
 
+        // if there are more than one carton then call carton price calculation method
         if(noOfCarton >= 1)
             orderPrice += cartonAmount(noOfCarton, cartonPrice);
 
@@ -56,7 +64,7 @@ public class PriceEngine
      * */
     private static double singleUnitAmount(int noOfSingleUnits, double cartonPrice, int cartonSize)
     {
-        return noOfSingleUnits * ((cartonPrice + (cartonPrice * 30/100)) / cartonSize);
+        return noOfSingleUnits * ((cartonPrice + (cartonPrice * PRICE_ADDED_PERCENTAGE)) / cartonSize);
     }
 
     /**
@@ -68,10 +76,10 @@ public class PriceEngine
     {
         double priceForCartons;
 
-        if(noOfCarton < 3)
+        if(noOfCarton < CARTON_DISCOUNT_STARTING_RANGE)
             priceForCartons = noOfCarton * cartonPrice;
         else
-            priceForCartons = noOfCarton * (cartonPrice - (cartonPrice * 10/100));
+            priceForCartons = noOfCarton * (cartonPrice - (cartonPrice * PRICE_DISCOUNT_PERCENTAGE));
 
         return priceForCartons;
     }
