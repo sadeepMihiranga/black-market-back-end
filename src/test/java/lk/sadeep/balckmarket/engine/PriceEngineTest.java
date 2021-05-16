@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 class PriceEngineTest
 {
-    private PriceEngine priceEngine = new PriceEngine();
+    private final PriceEngine priceEngine = new PriceEngine();
 
     @Test
     public void shouldCalculateOptimizedPriceForSingleUnits()

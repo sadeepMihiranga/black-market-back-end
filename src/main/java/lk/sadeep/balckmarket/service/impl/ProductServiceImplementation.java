@@ -90,6 +90,7 @@ public class ProductServiceImplementation implements ProductService
 
             priceTableResponse.setProduct(productDto);
 
+            // calculate optimized price for each no of units by calling price engine
             for(int i = 1; i <= noOfUnitsToCalculate; i++)
             {
                 prices.add(new PriceTableData(i, priceEngine.calculateThePricing(productDto.getCartonPrice(), productDto.getCartonSize(), i, 0)));
