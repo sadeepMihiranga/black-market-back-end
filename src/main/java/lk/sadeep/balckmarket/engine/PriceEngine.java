@@ -94,9 +94,10 @@ public class PriceEngine
     {
         double priceForCartons;
 
+        // if no of cartons are less that discount range then there will be no discount
         if(noOfCarton < CARTON_DISCOUNT_STARTING_RANGE)
             priceForCartons = noOfCarton * cartonPrice;
-        else
+        else // if no of cartons are greater that discount range then calculate price with discount
             priceForCartons = noOfCarton * (cartonPrice - (cartonPrice * PRICE_DISCOUNT_PERCENTAGE));
 
         return priceForCartons;
