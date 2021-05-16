@@ -53,4 +53,22 @@ public class Product
             nullable = false
     )
     private String imageUrl;
+
+    @Column(
+            name = "price_added_percentage",
+            nullable = false
+    )
+    private Double priceAddedPercentage;
+
+    @Column(
+            name = "price_discount_percentage",
+            nullable = false
+    )
+    private Double priceDiscountPercentage;
+
+    @Column(
+            name = "carton_discount_starting_quantity",
+            nullable = false
+    )
+    private Integer cartonDiscountStartingQuantity;
 }

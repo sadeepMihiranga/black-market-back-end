@@ -97,7 +97,7 @@ public class ProductServiceImplementation implements ProductService
             // calculate and create list of optimized prices for each no of units by calling the price engine
             for(int i = 1; i <= noOfUnitsToCalculate; i++)
             {
-                prices.add(new PriceTableData(i, priceEngine.calculateThePricing(productDto.getCartonPrice(), productDto.getCartonSize(), i, 0)));
+                prices.add(new PriceTableData(i, priceEngine.calculateThePricing(productDto, i, 0)));
             }
 
             priceTableResponse.setPrices(prices);
@@ -145,7 +145,7 @@ public class ProductServiceImplementation implements ProductService
 
             // creating response by merging product and order price
             priceCalculateResponse.setProduct(productDto);
-            priceCalculateResponse.setPrice(priceEngine.calculateThePricing(productDto.getCartonPrice(), productDto.getCartonSize(), noOfSingleUnits, noOfCartons));
+            priceCalculateResponse.setPrice(priceEngine.calculateThePricing(productDto, noOfSingleUnits, noOfCartons));
         }
         catch(DataNotFoundException e)
         {
@@ -166,6 +166,15 @@ public class ProductServiceImplementation implements ProductService
      * */
     private ProductDto getProductDTOByProduct(Product product)
     {
-        return new ProductDto(product.getId(), product.getProductName(), product.getCartonSize(), product.getCartonPrice(), product.getImageUrl());
+        return new ProductDto(
+                product.getId(),
+                product.getProductName(),
+                product.getCartonSize(),
+                product.getCartonPrice(),
+                product.getImageUrl(),
+                product.getPriceAddedPercentage(),
+                product.getPriceDiscountPercentage(),
+                product.getCartonDiscountStartingQuantity()
+        );
     }
 }

@@ -9,10 +9,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PriceEngineTestPojo
 {
-    Double expectedResult;
-    Double cartonPrice;
-    Integer cartonSize;
-    Integer noOfSingleUnits;
-    Integer noOfCartons;
+    private Double expectedResult;
+    private Double cartonPrice;
+    private Integer cartonSize;
+    private Integer noOfSingleUnits;
+    private Integer noOfCartons;
+    private Double priceAddedPercentage;
+    private Double priceDiscountPercentage;
+    private Integer cartonDiscountStartingQuantity;
 }
 

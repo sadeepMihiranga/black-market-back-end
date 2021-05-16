@@ -1,10 +1,12 @@
 package lk.sadeep.balckmarket.dto;
 
+import lombok.Setter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDto
@@ -14,4 +16,7 @@ public class ProductDto
     private Integer cartonSize;
     private Double cartonPrice;
     private String imageUrl;
+    private Double priceAddedPercentage;
+    private Double priceDiscountPercentage;
+    private Integer cartonDiscountStartingQuantity;
 }

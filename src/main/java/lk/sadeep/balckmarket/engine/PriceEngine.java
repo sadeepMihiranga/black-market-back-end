@@ -1,5 +1,6 @@
 package lk.sadeep.balckmarket.engine;
 
+import lk.sadeep.balckmarket.dto.ProductDto;
 import org.springframework.stereotype.Component;
 
 import static lk.sadeep.balckmarket.util.AppConstants.DECIMAL_ZERO;
@@ -7,19 +8,29 @@ import static lk.sadeep.balckmarket.util.AppConstants.DECIMAL_ZERO;
 @Component
 public class PriceEngine
 {
-    private static final Double PRICE_ADDED_PERCENTAGE = 0.3;
-    private static final Double PRICE_DISCOUNT_PERCENTAGE = 0.1;
-    private static final Integer CARTON_DISCOUNT_STARTING_RANGE = 3;
+    // defaults values for rates, values from db will override
+    private static Double PRICE_ADDED_PERCENTAGE = 0.3;
+    private static Double PRICE_DISCOUNT_PERCENTAGE = 0.1;
+    private static Integer CARTON_DISCOUNT_STARTING_RANGE = 3;
 
     /**
      * @Method            :   calculateThePricing
      * @Parameters        :   double cartonPrice, int cartonSize, int noOfSingleUnits, int noOfCarton
      * @Description       :   calculate and return optimized price of a product
      * */
-    public double calculateThePricing(double cartonPrice, int cartonSize, int noOfSingleUnits, int noOfCarton)
+    public double calculateThePricing(ProductDto productDto, int noOfSingleUnits, int noOfCarton)
     {
         int calculatedSingleUnits;
         int calculatedCartons = 0;
+
+        int cartonSize = productDto.getCartonSize();
+        double cartonPrice = productDto.getCartonPrice();
+
+        // if values from db is received correctly as expected then override default values
+        if(productDto.getCartonDiscountStartingQuantity() > 0
+                && productDto.getPriceDiscountPercentage() > 0
+                && productDto.getPriceAddedPercentage() > 0)
+            setRates(productDto);
 
         // if no of single units are greater that carton size then do the optimizing calculations
         if(noOfSingleUnits >= cartonSize)
@@ -35,6 +46,13 @@ public class PriceEngine
             calculatedCartons += noOfCarton;
 
         return calculateOrderAmount(calculatedSingleUnits, calculatedCartons, cartonPrice, cartonSize);
+    }
+
+    private static void setRates(ProductDto productDto)
+    {
+        PRICE_DISCOUNT_PERCENTAGE = productDto.getPriceDiscountPercentage();
+        PRICE_ADDED_PERCENTAGE = productDto.getPriceAddedPercentage();
+        CARTON_DISCOUNT_STARTING_RANGE = productDto.getCartonDiscountStartingQuantity();
     }
 
     /**
