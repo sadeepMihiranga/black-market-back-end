@@ -78,7 +78,7 @@ public class ProductServiceImplementation implements ProductService
         if(noOfUnitsToCalculate < 1)
             throw new BadApiRequestException("No of units should be larger than 0");
 
-        if(productId < 0)
+        if(productId <= 0)
             throw new BadApiRequestException("Product id should be larger than 0");
 
         var priceTableResponse = new PriceTableResponse();
